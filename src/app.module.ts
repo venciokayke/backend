@@ -3,9 +3,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
+import { CinemaModule } from './cinema/cinema.module';
+import { SalaModule } from './sala/sala.module';
+import { FilmeModule } from './filme/filme.module';
+import { SessaoModule } from './sessao/sessao.module';
+import { IngressoModule } from './ingresso/ingresso.module';
+import { PedidoModule } from './pedido/pedido.module';
+import { LancheComboModule } from './lanche-combo/lanche-combo.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule],
+  imports: [PrismaModule, UsersModule, CinemaModule, SalaModule, FilmeModule, SessaoModule, IngressoModule, PedidoModule, LancheComboModule],
   controllers: [AppController],
   providers: [AppService],
 })

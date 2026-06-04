@@ -8,11 +8,118 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
+model Cinema{
   id Int @id @default(autoincrement())
-  email String @unique
-  name String?
-  password String
+  nome String
+  endereco String
+
+  listaSalas Sala[]
+  listaFilmes Filme[]
+  listaSessao Sessao[]
+
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+}
+
+model Sessao{
+  id Int @id @default(autoincrement())
+  horarioExibicao DateTime
+
+  filmeId Int
+  filme Filme @relation(fields: [filmeId], references: [id])
+
+  salaId Int
+  sala Sala @relation(fields: [salaId], references: [id])
+
+  cinemaId Int
+  cinema Cinema @relation(fields: [cinemaId], references: [id])
+
+  ingressos Ingresso[]
+  
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+}
+
+model Sala{
+  id Int @id @default(autoincrement())
+  numero Int
+  capacidade Int
+  poutronas Json
+
+  cinemaId Int
+  cinema Cinema @relation(fields: [cinemaId], references: [id])
+
+  sessoes Sessao[]
+
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+}
+
+enum Genero{
+  Acao
+  Comedia
+  Ficcao
+}
+
+model Filme{
+  id Int @id @default(autoincrement())
+  titulo String
+  sinopse String
+  classificacao String
+  duracao DateTime
+  elenco String
+  genero Genero
+  dataIniciaExibicao DateTime
+  dataFinalExibicao DateTime
+
+  cinemaId Int
+  cinema Cinema @relation(fields: [cinemaId], references: [id])
+
+  sessoes Sessao[]
+
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+}
+
+model Ingresso{
+  id Int @id @default(autoincrement())
+  valorInteira Float
+  valorMeia Float
+
+  sessaoId Int
+  sessoes Sessao @relation(fields: [sessaoId], references: [id])
+
+  pedidoId     Int?
+  pedido       Pedido?  @relation(fields: [pedidoId], references: [id])
+
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+}
+
+model Pedido{
+  id Int @id @default(autoincrement())
+  qtInteira Int
+  qtMeia Int
+  valorTotal Float
+
+  ingresso Ingresso[]
+  lanche LancheCombo[]
+  
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt()
+}
+
+model LancheCombo{
+  id Int @id @default(autoincrement())
+  nome String
+  descricao String
+  valorUnitario Float
+  qtUnidade Int
+  subtotal Float
+
+  pedidoId Int?
+  pedido Pedido? @relation(fields: [pedidoId], references: [id])
+
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt()
 }
