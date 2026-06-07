@@ -1,24 +1,23 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Configuração do ValidationPipe (importante para o Swagger ler as
+  // 1. Ativa a validação global dos DTOs
   app.useGlobalPipes(new ValidationPipe());
 
-  // Configuração do Swagger
+  // 2. Configuração do Swagger
   const config = new DocumentBuilder()
-    .setTitle('User CRUD API')
-    .setDescription('Documentação da API de Usuários com NestJS e Prisma')
+    .setTitle('Cinema API')
+    .setDescription('Documentação da API do Sistema de Cinema com NestJS e Prisma')
     .setVersion('1.0')
-    .addTag('users')
     .build();
-
+    
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document); // Rota onde o Swagger estará disponível;
+  SwaggerModule.setup('api', app, document); // A documentação ficará na rota /api
 
   await app.listen(3000);
   console.log(`Application is running on: http://localhost:3000/api`);
